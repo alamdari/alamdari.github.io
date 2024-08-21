@@ -11,19 +11,21 @@
   contents:
     - title: Ph.D. in Computer Science
       institution: University of Pisa, Pisa, Italy
-      year: Nov 2016 - May 2020
+      year: 2020
       description:
-        - Dissertation: Scalable Processing and Mining of Big Mobility Data
+        - Scalable Processing and Mining of Big Mobility Data
 
     - title: M.Sc. in Computer Engineering (Software)
       institution: Iran University of Science and Technology, Tehran, Iran
-      year: Sep 2013 - Mar 2016
+      year: 2016
       description:
-        - Thesis: A Similarity-Based Method for Moving Objects Trajectory Data Reduction in Road Networks
+        - A Similarity-Based Method for Moving Objects Trajectory Data Reduction in Road Networks
 
     - title: B.Sc. in Computer Engineering (Software)
       institution: Urmia University, Urmia, Iran
-      year: Sep 2008 - Sep 2013
+      year: 2013
+      description:
+        - Content-Based Image Retrieval (CBIR) System
 
 - title: Experience
   type: time_table
@@ -32,56 +34,46 @@
       institution: CNR (National Research Council of Italy) - Volkswagen (Data:Lab Munich)
       year: Oct 2021 - Jun 2022
       description:
-        - Project: Connected vehicle simulation for AI-based applications - Parking space availability prediction
-        - Role: Mobility data analytics specialist
+        - Connected vehicle simulation for AI-based applications - Parking space availability prediction
 
-    - title: Research and Development Specialist
+    - title: Research and Development
       institution: CNR (National Research Council of Italy) - Toyota Motors Europe (TME)
       year: Sep 2020 - Apr 2021
       description:
-        - Project: Car Drivers Predictability and Flexibility for Electric Vehicle Mobility
-        - Role: Research and development
+        - Car Drivers Predictability and Flexibility for Electric Vehicle Mobility
 
     - title: Research Associate
       institution: KDD-Lab, ISTI, CNR (National Research Council of Italy), Pisa, Italy
       year: Feb 2018 - Oct 2019
       description:
-        - Focus: Research activities related to the European project Track&Know
+        - Research activities related to the European project Track&Know
 
     - title: Visiting Graduate Research Student
       institution: Dalhousie University, Halifax, NS, Canada
       year: May 2019 - Aug 2019
       description:
-        - Focus: Big Mobility Data Management for vessels’ AIS data
+        - Big Mobility Data Management for vessels’ AIS data
 
-    - title: Visiting Researcher
+    - title: Visiting Researcher (Track&Know EU Project)
       institution: University of Piraeus, Piraeus, Greece
       year: Sep 2018 - Dec 2018
-      description:
-        - Focus: Track&Know EU Project
 
 - title: Academic Interests
   type: nested_list
   contents:
-    - title: Big Data Analytics
+    - title: Big Mobility Data Analytics
       items: 
         - Scalable data processing
         - Mobility data mining
+        - Electric vehicles
+        - Applications in sustainable transportation
 
     - title: Machine Learning
       items:
         - Predictive modeling
+        - Generative AI
         - Data-driven decision making
 
-    - title: Geographic Information Systems (GIS)
-      items:
-        - Spatial data analysis
-        - Applications in transportation and logistics
-
-    - title: Data Science in Mobility
-      items:
-        - Electric vehicle data analysis
-        - Traffic pattern analysis
 
 
 - title: Other Interests
