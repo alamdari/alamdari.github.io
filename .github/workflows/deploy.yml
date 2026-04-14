@@ -15,8 +15,33 @@ permissions:
   contents: write
 
 jobs:
+  # Pushes that only touch assets/html/ get a fast deploy job; everything else still runs the full Jekyll build.
+  filter:
+    runs-on: ubuntu-latest
+    outputs:
+      non_assets_html: ${{ steps.paths.outputs.non_assets_html }}
+      assets_html: ${{ steps.paths.outputs.assets_html }}
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Detect changed paths
+        uses: dorny/paths-filter@v3
+        id: paths
+        with:
+          filters: |
+            non_assets_html:
+              - '**'
+              - '!assets/html/**'
+            assets_html:
+              - 'assets/html/**'
+
   deploy:
-    # available images: https://github.com/actions/runner-images#available-images
+    needs: filter
+    if: |
+      github.event_name != 'push' ||
+      needs.filter.outputs.non_assets_html == 'true'
     runs-on: ubuntu-latest
     steps:
     - name: Checkout 🛎️
@@ -47,3 +72,24 @@ jobs:
       with:
         folder: _site
 
+  deploy-assets-html:
+    needs: filter
+    if: |
+      github.event_name == 'push' &&
+      (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') &&
+      needs.filter.outputs.non_assets_html != 'true' &&
+      needs.filter.outputs.assets_html == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+      - name: Stage assets/html for deploy
+        run: |
+          mkdir -p deploy/assets
+          cp -R assets/html deploy/assets/
+      - name: Deploy assets/html only (no full Jekyll build) 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: deploy
+          clean: false
+          commit-message: Deploy assets/html only

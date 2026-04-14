@@ -8,7 +8,7 @@ profile:
   align: right
   image: omid.jpg
   image_circular: false # crops the image to make it circular
-  more_info: <p>Ancaster, ON, Canada</p>
+  more_info: <p>Hamilton, ON, Canada</p>
 
 news: false  # includes a list of news items
 latest_posts: false  # includes a list of the newest posts
