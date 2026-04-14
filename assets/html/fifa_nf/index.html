@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Niagara Parks — visitor patterns and FIFA 2026</title>
+  <style>
+    :root {
+      --bg0: #0c1829;
+      --bg1: #0f2847;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --cyan: #22d3ee;
+      --teal: #2dd4bf;
+      --gold: #fbbf24;
+      --radius: 16px;
+      --shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+      --maxw: 960px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      background: linear-gradient(165deg, var(--bg0) 0%, #1e3a5f 45%, #e8f4fc 45%, #f0f9ff 100%);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+      font-size: 17px;
+    }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 1rem 3rem; }
+    .hero {
+      text-align: center;
+      padding: 2.75rem 1.25rem 2.25rem;
+      position: relative;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: min(420px, 80%);
+      height: 4px;
+      border-radius: 4px;
+      background: linear-gradient(90deg, transparent, var(--cyan), var(--teal), transparent);
+      opacity: 0.9;
+    }
+    .hero h1 {
+      font-size: clamp(1.35rem, 4vw, 1.85rem);
+      font-weight: 700;
+      margin: 0 auto 0.45rem;
+      color: #f8fafc;
+      letter-spacing: -0.03em;
+      text-shadow: 0 2px 24px rgba(0,0,0,0.35);
+      max-width: 22rem;
+    }
+    .hero .sub {
+      font-size: clamp(1rem, 2.6vw, 1.2rem);
+      font-weight: 600;
+      margin: 0 auto 0.55rem;
+      background: linear-gradient(90deg, var(--cyan), var(--teal));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      max-width: 24rem;
+      line-height: 1.35;
+    }
+    .hero-lead {
+      color: #e2e8f0;
+      font-size: clamp(1rem, 2.5vw, 1.05rem);
+      max-width: 24rem;
+      margin: 0.35rem auto 0;
+      line-height: 1.4;
+    }
+    section.block {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.5rem 1.5rem 1.35rem;
+      margin-bottom: 1.35rem;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+    h2 {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #0e7490;
+      margin: 0 0 1rem;
+      font-weight: 800;
+    }
+    .key-grid {
+      display: grid;
+      gap: 0.75rem;
+    }
+    @media (min-width: 640px) {
+      .key-grid { grid-template-columns: 1fr 1fr; }
+    }
+    ul.insights {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    ul.insights li.insight {
+      position: relative;
+      padding-left: 1.35rem;
+      margin-bottom: 0.85rem;
+      font-size: 0.98rem;
+    }
+    ul.insights li.insight::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.5em;
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--cyan), var(--teal));
+      box-shadow: 0 0 12px rgba(34, 211, 238, 0.5);
+    }
+    .viz-section h2 {
+      margin-bottom: 1.25rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.14em;
+    }
+    .viz-grid {
+      display: grid;
+      gap: 1.25rem;
+    }
+    @media (min-width: 900px) {
+      .viz-grid { grid-template-columns: 1fr 1fr; }
+      .viz-grid .viz-span2 { grid-column: 1 / -1; }
+    }
+    .viz-card {
+      background: linear-gradient(180deg, #f8fafc 0%, #fff 100%);
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      padding: 0.75rem 0.75rem 0.5rem;
+      overflow: hidden;
+    }
+    .viz-card .viz-svg {
+      width: 100%;
+      height: auto;
+      max-height: none;
+      display: block;
+      vertical-align: top;
+    }
+    @media (min-width: 700px) {
+      .viz-card .viz-svg { max-height: 300px; }
+      .viz-card.wide .viz-svg { max-height: 320px; }
+    }
+    .viz-caption {
+      font-size: 0.95rem;
+      color: #475569;
+      padding: 0.5rem 0.35rem 0.75rem;
+      line-height: 1.45;
+    }
+    @media (max-width: 699px) {
+      .viz-section h2 { font-size: 0.88rem; letter-spacing: 0.12em; }
+      .viz-caption { font-size: 1.02rem; }
+      .viz-card { padding: 0.85rem 0.65rem 0.6rem; }
+    }
+    .rank-table {
+      width: 100%;
+      table-layout: fixed;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+    .rank-table td:first-child {
+      width: 52%;
+      word-wrap: break-word;
+    }
+    .rank-table th, .rank-table td {
+      padding: 0.65rem 0.5rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .rank-table th {
+      color: var(--muted);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      text-align: left;
+    }
+    .bar-cell { vertical-align: middle; }
+    .bar-cell-row {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
+      min-width: 0;
+    }
+    .bar-cell .pct {
+      flex: 0 0 4.25rem;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+      color: #0f766e;
+    }
+    .bar-track {
+      flex: 1 1 auto;
+      min-width: 0;
+      height: 8px;
+      border-radius: 4px;
+      background: #e2e8f0;
+      overflow: hidden;
+    }
+    .bar-fill {
+      display: block;
+      height: 100%;
+      max-width: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #0e7490, #14b8a6);
+    }
+    .subpct { font-size: 0.72rem; color: #94a3b8; margin-left: 0.35rem; }
+    .opp-list, .what-list {
+      margin: 0;
+      padding-left: 1.2rem;
+    }
+    .opp-list li, .planning-list li, .rec-list li { margin-bottom: 0.55rem; }
+    .planning-list, .rec-list { margin: 0; padding-left: 1.15rem; }
+    .rec-item strong { color: #0f766e; }
+    .closing-block {
+      margin: 1.25rem 0 0;
+    }
+    .collab-line {
+      text-align: center;
+      font-size: 0.95rem;
+      color: #475569;
+      padding: 1rem 1.15rem;
+      margin: 0;
+      line-height: 1.55;
+      border-radius: 12px;
+      background: linear-gradient(90deg, rgba(34,211,238,0.1), rgba(45,212,191,0.1));
+      border: 1px solid #bae6fd;
+    }
+    .fifa-box {
+      background: linear-gradient(135deg, #ecfeff 0%, #f0fdfa 50%, #fff7ed 100%);
+      border: 1px solid #a5f3fc;
+    }
+    .fifa-box p { margin: 0; font-size: 0.98rem; line-height: 1.55; }
+    .contacts-box {
+      background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%);
+      border: 1px solid #fde68a;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.5rem 1.5rem 1.35rem;
+      margin-top: 1.35rem;
+    }
+    .contacts-box h2 {
+      text-transform: none;
+      letter-spacing: 0.06em;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #0e7490;
+    }
+    .contacts-intro {
+      margin: 0.35rem 0 0;
+      font-weight: 600;
+      color: #334155;
+      font-size: 0.95rem;
+    }
+    .contacts-list {
+      list-style: none;
+      padding: 0;
+      margin: 0.65rem 0 0;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+    .contacts-list li { margin-bottom: 0.35rem; }
+    .contacts-box a { color: #0e7490; }
+    .contacts-thanks {
+      margin: 1.1rem 0 0;
+      font-size: 0.9rem;
+      color: #64748b;
+      line-height: 1.45;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <h1>Insights from 2025 for FIFA 2026</h1>
+      <p class="sub">Peak times, top sites, and where there is more room across the day.</p>
+      <p class="hero-lead">Based on Niagara Parks Commission data</p>
+    </header>
+
+    <section class="block" aria-labelledby="kinsights">
+      <h2 id="kinsights">Key insights</h2>
+      <ul class="insights">
+<li class="insight">Journey Behind the Falls (summer 2025): busiest period is late morning to early afternoon.</li>
+<li class="insight">Lower-traffic hours include roughly 7–8 AM and 8–9 PM.</li>
+<li class="insight">High-traffic days are concentrated in a relatively small share of the period covered.</li>
+<li class="insight">About 62% of scans are concentrated in the three busiest attractions.</li>
+      </ul>
+    </section>
+
+    <section class="block viz-section" aria-labelledby="viz">
+      <h2 id="viz">At a glance</h2>
+      <div class="viz-grid">
+        <div class="viz-card">
+          <svg class="viz-svg" viewBox="0 0 640 228" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+<defs><linearGradient id="gBar-jb" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a9bc7"/><stop offset="100%" stop-color="#0c5f78"/></linearGradient></defs>
+<text x="44" y="18" class="svg-title" font-size="16" fill="#334155" font-weight="600">Journey Behind the Falls — load by hour (summer 2025)</text>
+<line x1="40" y1="184.0" x2="624" y2="184.0" stroke="#e2e8f0" stroke-width="1"/>
+<text x="36" y="188.0" text-anchor="end" font-size="12" fill="#64748b">0</text>
+<line x1="40" y1="108.0" x2="624" y2="108.0" stroke="#e2e8f0" stroke-width="1"/>
+<text x="36" y="112.0" text-anchor="end" font-size="12" fill="#64748b">0.52</text>
+<line x1="40" y1="32.0" x2="624" y2="32.0" stroke="#e2e8f0" stroke-width="1"/>
+<text x="36" y="36.0" text-anchor="end" font-size="12" fill="#64748b">1.04</text>
+<rect x="49.1" y="183.5" width="26.1" height="0.5" rx="4" fill="url(#gBar-jb)" opacity="0.92"/>
+<text x="62.1" y="218" text-anchor="middle" font-size="11" fill="#475569">7a</text>
+<rect x="85.3" y="153.7" width="26.1" height="30.3" rx="4" fill="url(#gBar-jb)" opacity="0.92"/>
+<text x="98.4" y="218" text-anchor="middle" font-size="11" fill="#475569">8a</text>
+<rect x="121.6" y="98.4" width="26.1" height="85.6" rx="4" fill="url(#gBar-jb)" opacity="0.92"/>
+<text x="134.6" y="218" text-anchor="middle" font-size="11" fill="#475569">9a</text>
+<rect x="157.8" y="67.2" width="26.1" height="116.8" rx="4" fill="url(#gBar-jb)" opacity="0.92"/>
+<text x="170.9" y="218" text-anchor="middle" font-size="11" fill="#475569">10a</text>
+<rect x="194.1" y="45.8" width="26.1" height="138.2" rx="4" fill="url(#gBar-jb)" opacity="0.92"/>
+<text x="207.1" y="218" text-anchor="middle" font-size="11" fill="#475569">11a</text>
+<rect x="230.3" y="56.9" width="26.1" height="127.1" rx="4" fill="url(#gBar-jb)" opacity="0.92"/>
+<text x="243.4" y="218" text-anchor="middle" font-size="11" fill="#475569">12p</text>
+<rect x="266.6" y="64.1" width="26.1" height="119.9" rx="4" fill="url(#gBar-jb)" opacity="0.92"/>
+<text x="279.6" y="218" text-anchor="middle" font-size="11" fill="#475569">1p</text>
+<rect x="302.8" y="62.6" width="26.1" height="121.4" rx="4" fill="url(#gBar-jb)" opacity="0.92"/>
+<text x="315.9" y="218" text-anchor="middle" font-size="11" fill="#475569">2p</text>
+<rect x="339.1" y="68.1" width="26.1" height="115.9" rx="4" fill="url(#gBar-jb)" opacity="0.92"/>
+<text x="352.1" y="218" text-anchor="middle" font-size="11" fill="#475569">3p</text>
+<rect x="375.3" y="79.1" width="26.1" height="104.9" rx="4" fill="url(#gBar-jb)" opacity="0.92"/>
+<text x="388.4" y="218" text-anchor="middle" font-size="11" fill="#475569">4p</text>
+<rect x="411.6" y="93.2" width="26.1" height="90.8" rx="4" fill="url(#gBar-jb)" opacity="0.92"/>
+<text x="424.6" y="218" text-anchor="middle" font-size="11" fill="#475569">5p</text>
+<rect x="447.8" y="113.4" width="26.1" height="70.6" rx="4" fill="url(#gBar-jb)" opacity="0.92"/>
+<text x="460.9" y="218" text-anchor="middle" font-size="11" fill="#475569">6p</text>
+<rect x="484.1" y="134.7" width="26.1" height="49.3" rx="4" fill="url(#gBar-jb)" opacity="0.92"/>
+<text x="497.1" y="218" text-anchor="middle" font-size="11" fill="#475569">7p</text>
+<rect x="520.3" y="154.6" width="26.1" height="29.4" rx="4" fill="url(#gBar-jb)" opacity="0.92"/>
+<text x="533.4" y="218" text-anchor="middle" font-size="11" fill="#475569">8p</text>
+<rect x="556.6" y="173.8" width="26.1" height="10.2" rx="4" fill="url(#gBar-jb)" opacity="0.92"/>
+<text x="569.6" y="218" text-anchor="middle" font-size="11" fill="#475569">9p</text>
+<rect x="592.8" y="173.3" width="26.1" height="10.7" rx="4" fill="url(#gBar-jb)" opacity="0.92"/>
+<text x="605.9" y="218" text-anchor="middle" font-size="11" fill="#475569">10p</text>
+</svg>
+          <p class="viz-caption">Journey Behind the Falls: typical load by hour in summer 2025.</p>
+        </div>
+        <div class="viz-card">
+          <svg class="viz-svg" viewBox="0 0 640 210" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+<defs>
+<linearGradient id="gH-st" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#14b8a6"/><stop offset="100%" stop-color="#0d9488"/></linearGradient>
+</defs>
+<text x="120" y="18" font-size="16" fill="#334155" font-weight="600">Top sites by scan volume</text>
+<text x="114" y="52" text-anchor="end" font-size="12" fill="#334155">Journey Behind the Falls</text>
+<rect x="120" y="34.0" width="496.0" height="20.1" rx="4" fill="url(#gH-st)" opacity="0.95"/>
+<text x="622.0" y="52" font-size="12" fill="#0f766e" font-weight="600">290k</text>
+<text x="114" y="84" text-anchor="end" font-size="12" fill="#334155">Falls Incline Railway</text>
+<rect x="120" y="66.4" width="381.5" height="20.1" rx="4" fill="url(#gH-st)" opacity="0.95"/>
+<text x="507.5" y="84" font-size="12" fill="#0f766e" font-weight="600">223k</text>
+<text x="114" y="117" text-anchor="end" font-size="12" fill="#334155">WEGO Green Line</text>
+<rect x="120" y="98.8" width="195.9" height="20.1" rx="4" fill="url(#gH-st)" opacity="0.95"/>
+<text x="321.9" y="117" font-size="12" fill="#0f766e" font-weight="600">114k</text>
+<text x="114" y="149" text-anchor="end" font-size="12" fill="#334155">Niagara Parks Butterfly Conserva</text>
+<rect x="120" y="131.2" width="176.4" height="20.1" rx="4" fill="url(#gH-st)" opacity="0.95"/>
+<text x="302.4" y="149" font-size="12" fill="#0f766e" font-weight="600">103k</text>
+<text x="114" y="181" text-anchor="end" font-size="12" fill="#334155">White Water Walk</text>
+<rect x="120" y="163.6" width="151.6" height="20.1" rx="4" fill="url(#gH-st)" opacity="0.95"/>
+<text x="277.6" y="181" font-size="12" fill="#0f766e" font-weight="600">89k</text>
+</svg>
+          <p class="viz-caption">Where visits are highest: top sites by scan volume.</p>
+        </div>
+        <div class="viz-card wide viz-span2">
+          <svg class="viz-svg" viewBox="0 0 640 268" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+<defs>
+<linearGradient id="gArea-hr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22d3ee" stop-opacity="0.35"/><stop offset="100%" stop-color="#0c4a6e" stop-opacity="0.05"/></linearGradient>
+<linearGradient id="gLine-hr" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#0891b2"/><stop offset="100%" stop-color="#0e7490"/></linearGradient>
+</defs>
+<text x="48" y="22" class="svg-title" font-size="16" fill="#334155" font-weight="600">All sites — hourly volume (summer peak in data)</text>
+<path d="M 48.0,228.0 L 48.0,227.9 L 74.0,227.5 L 100.0,227.3 L 126.0,224.1 L 152.0,226.1 L 178.0,227.9 L 204.0,227.5 L 230.0,208.9 L 256.0,141.9 L 282.0,76.0 L 308.0,43.2 L 334.0,51.8 L 360.0,55.9 L 386.0,54.2 L 412.0,62.5 L 438.0,82.2 L 464.0,113.4 L 490.0,126.8 L 516.0,141.8 L 542.0,151.6 L 568.0,181.4 L 594.0,200.4 L 620.0,227.1 L 620.0,228.0 Z" fill="url(#gArea-hr)"/>
+<path d="M 48.0,227.9 L 74.0,227.5 L 100.0,227.3 L 126.0,224.1 L 152.0,226.1 L 178.0,227.9 L 204.0,227.5 L 230.0,208.9 L 256.0,141.9 L 282.0,76.0 L 308.0,43.2 L 334.0,51.8 L 360.0,55.9 L 386.0,54.2 L 412.0,62.5 L 438.0,82.2 L 464.0,113.4 L 490.0,126.8 L 516.0,141.8 L 542.0,151.6 L 568.0,181.4 L 594.0,200.4 L 620.0,227.1" fill="none" stroke="url(#gLine-hr)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="48.0" y="260" text-anchor="middle" font-size="11" fill="#64748b">12a</text>
+<text x="100.0" y="260" text-anchor="middle" font-size="11" fill="#64748b">3a</text>
+<text x="152.0" y="260" text-anchor="middle" font-size="11" fill="#64748b">5a</text>
+<text x="204.0" y="260" text-anchor="middle" font-size="11" fill="#64748b">7a</text>
+<text x="256.0" y="260" text-anchor="middle" font-size="11" fill="#64748b">9a</text>
+<text x="308.0" y="260" text-anchor="middle" font-size="11" fill="#64748b">11a</text>
+<text x="360.0" y="260" text-anchor="middle" font-size="11" fill="#64748b">1p</text>
+<text x="412.0" y="260" text-anchor="middle" font-size="11" fill="#64748b">3p</text>
+<text x="464.0" y="260" text-anchor="middle" font-size="11" fill="#64748b">5p</text>
+<text x="516.0" y="260" text-anchor="middle" font-size="11" fill="#64748b">7p</text>
+<text x="568.0" y="260" text-anchor="middle" font-size="11" fill="#64748b">9p</text>
+<text x="620.0" y="260" text-anchor="middle" font-size="11" fill="#64748b">11p</text>
+</svg>
+          <p class="viz-caption">All sites together: volume rises into midday and tapers into the evening during the summer peak.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="pressure">
+      <h2 id="pressure">Where pressure is highest</h2>
+      <table class="rank-table">
+        <thead><tr><th>Attraction</th><th>Share of volume</th></tr></thead>
+        <tbody>
+<tr><td>Journey Behind the Falls</td><td class="bar-cell"><div class="bar-cell-row"><span class="pct">28.9%</span><span class="bar-track"><span class="bar-fill" style="width:52.0%"></span></span></div></td></tr>
+<tr><td>Falls Incline Railway</td><td class="bar-cell"><div class="bar-cell-row"><span class="pct">22.2%</span><span class="bar-track"><span class="bar-fill" style="width:40.0%"></span></span></div></td></tr>
+<tr><td>WEGO Green Line</td><td class="bar-cell"><div class="bar-cell-row"><span class="pct">11.4%</span><span class="bar-track"><span class="bar-fill" style="width:20.5%"></span></span></div></td></tr>
+<tr><td>Niagara Parks Butterfly Conservatory</td><td class="bar-cell"><div class="bar-cell-row"><span class="pct">10.3%</span><span class="bar-track"><span class="bar-fill" style="width:18.5%"></span></span></div></td></tr>
+<tr><td>White Water Walk</td><td class="bar-cell"><div class="bar-cell-row"><span class="pct">8.8%</span><span class="bar-track"><span class="bar-fill" style="width:15.9%"></span></span></div></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="block" aria-labelledby="opp">
+      <h2 id="opp">Opportunity windows</h2>
+      <ul class="opp-list">
+<li>Before 10 AM: clearest low-pressure window.</li>
+<li>10 AM – 2 PM: highest pressure; avoid adding concentration.</li>
+<li>After 5 PM: secondary opportunity window, where operating hours allow.</li>
+      </ul>
+    </section>
+
+    <section class="block" aria-labelledby="plan">
+      <h2 id="plan">Planning implications</h2>
+      <ul class="planning-list">
+<li class="planning-item">Midday peak (~10 AM – 2 PM) is the primary timing constraint.</li>
+<li class="planning-item">Early and late hours are the clearest opportunities to redistribute demand.</li>
+<li class="planning-item">Demand is concentrated in a small number of sites, creating localized pressure.</li>
+      </ul>
+    </section>
+
+    <section class="block fifa-box" aria-labelledby="fifa">
+      <h2 id="fifa">FIFA context</h2>
+      <p>The FIFA tournament overlaps with Niagara’s peak summer season, creating natural opportunities to plan visits around rest days and days without a Toronto match.</p>
+    </section>
+
+    <section class="block" aria-labelledby="indrec">
+      <h2 id="indrec">Indicative recommendations</h2>
+      <ul class="rec-list">
+<li class="rec-item"><strong>Timing</strong>: Shift interest toward shoulder hours, especially early morning and evening.</li>
+<li class="rec-item"><strong>Flow</strong>: Use hourly and site patterns to stagger entry or experience order during peak periods.</li>
+<li class="rec-item"><strong>Focus</strong>: Prioritize coordination at the highest-volume sites, where pressure is most concentrated.</li>
+<li class="rec-item"><strong>FIFA alignment</strong>: Use rest days and days without a Toronto match as planning windows.</li>
+      </ul>
+    </section>
+
+    <div class="closing-block">
+      <p class="collab-line" role="note">This summary highlights where coordination can have the most immediate impact. Additional data on attraction capacity, operating constraints, accommodation patterns, and visitor movement between sites would help turn it into operational planning.</p>
+    </div>
+
+    <section class="contacts-box" aria-labelledby="contacts">
+      <h2 id="contacts">Project Contacts</h2>
+      <p class="contacts-intro">Project team:</p>
+      <ul class="contacts-list">
+        <li>Lou Vescio — <a href="mailto:lvescio@nfinnovationhub.ca">lvescio@nfinnovationhub.ca</a></li>
+        <li>Ehsan Torabizadeh — <a href="mailto:ehsan.torabizadeh@unfc.ca">ehsan.torabizadeh@unfc.ca</a></li>
+        <li>Omid Isfahani Alamdari — <a href="mailto:omid.isfahan@unfc.ca">omid.isfahan@unfc.ca</a></li>
+      </ul>
+      <p class="contacts-thanks">Thank you to Niagara Parks Commission for providing the data.</p>
+    </section>
+  </div>
+</body>
+</html>

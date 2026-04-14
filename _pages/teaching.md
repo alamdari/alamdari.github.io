@@ -7,7 +7,7 @@ nav: true
 nav_order: 4
 ---
 
-I am a full-time Assistant Professor of Data Analytics at the [University of Niagara Falls Canada](https://www.unfc.ca/directory/omid-isfahani-alamdari). Courses I teach at UNFC are listed on that faculty profile.
+I am a [full-time Assistant Professor](https://www.unfc.ca/directory/omid-isfahani-alamdari) of Data Analytics at the University of Niagara Falls Canada. Courses I teach at UNFC are listed on that faculty profile.
 
 The following is a selection of courses I have had the pleasure of teaching at other institutions. Additionally, I developed a graduate-level course titled **"Mobility Data Analytics: Understanding Movement from EVs to Wildlife Migration,"** designed for programs in Computer Science, Data Science, and related fields. While I have not yet taught this course, all the material is fully prepared. I am available to teach it at any institution where there is interest, and I can provide more details upon request to faculty or administrative staff.
 
