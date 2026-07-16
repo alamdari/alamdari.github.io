@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>TCF Audio Player</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      padding: 24px 16px;
+      background: #111;
+      color: #eee;
+      min-height: 100vh;
+    }
+    h1 { font-size: 1.25rem; margin: 0 0 16px; font-weight: 600; }
+    #status {
+      font-size: 1.1rem;
+      line-height: 1.4;
+      min-height: 3em;
+      margin-bottom: 20px;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    button {
+      font-size: 1.25rem;
+      padding: 16px 28px;
+      border: none;
+      border-radius: 8px;
+      background: #2a7;
+      color: #fff;
+      cursor: pointer;
+      min-width: 100px;
+    }
+    button:disabled {
+      background: #333;
+      color: #888;
+      cursor: default;
+    }
+    button.secondary { background: #444; }
+    button.secondary:disabled { background: #333; }
+    #list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.9rem;
+    }
+    #list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #333;
+      color: #999;
+    }
+    #list li.current { color: #fff; font-weight: 600; }
+    #list li.done { color: #555; }
+    .error { color: #f66; }
+  </style>
+</head>
+<body>
+  <h1>TCF Audio Player</h1>
+  <div id="status">Ready.</div>
+  <div class="controls">
+    <button id="prevBtn" class="secondary" disabled>Prev</button>
+    <button id="playBtn" disabled>Play</button>
+    <button id="nextBtn" class="secondary" disabled>Next</button>
+  </div>
+  <ol id="list"></ol>
+  <audio id="player" preload="auto"></audio>
+
+  <!-- Filled by: python3 build.py -->
+  <script type="text/plain" id="playlist">
+https://french-tcf.com/media/CO/audio/Q60/2%20(21).mp3
+https://french-tcf.com/media/CO/audio/Q29/series06_q30_0.mp3
+https://french-tcf.com/media/CO/audio/Q323/10%20(28).mp3
+  </script>
+
+  <script>
+    const PAUSE_MS = 15000;
+    const statusEl = document.getElementById("status");
+    const playBtn = document.getElementById("playBtn");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const listEl = document.getElementById("list");
+    const player = document.getElementById("player");
+
+    const urls = document
+      .getElementById("playlist")
+      .textContent.split(/\r?\n/)
+      .map((l) => l.trim())
+      .filter((l) => l && !l.startsWith("#"));
+
+    let index = 0;
+    let playing = false;
+    let pauseTimer = null;
+    let pauseTick = null;
+    let pauseLeft = 0;
+
+    function fileName(url) {
+      try {
+        return decodeURIComponent(url.split("/").pop());
+      } catch {
+        return url;
+      }
+    }
+
+    function setStatus(text, isError) {
+      statusEl.textContent = text;
+      statusEl.className = isError ? "error" : "";
+    }
+
+    function updateNav() {
+      prevBtn.disabled = !urls.length || index <= 0;
+      nextBtn.disabled = !urls.length || index >= urls.length - 1;
+      playBtn.disabled = !urls.length;
+    }
+
+    function renderList() {
+      listEl.innerHTML = "";
+      urls.forEach((url, i) => {
+        const li = document.createElement("li");
+        li.textContent = (i + 1) + ". " + fileName(url);
+        if (i < index) li.className = "done";
+        else if (i === index) li.className = "current";
+        listEl.appendChild(li);
+      });
+      updateNav();
+    }
+
+    function clearPause() {
+      if (pauseTimer) clearTimeout(pauseTimer);
+      if (pauseTick) clearInterval(pauseTick);
+      pauseTimer = null;
+      pauseTick = null;
+      pauseLeft = 0;
+    }
+
+    function loadTrack(i) {
+      index = i;
+      player.src = urls[i];
+      renderList();
+      setStatus("Track " + (i + 1) + " / " + urls.length + "\n" + fileName(urls[i]));
+    }
+
+    function startPauseThenNext() {
+      if (index >= urls.length - 1) {
+        playing = false;
+        playBtn.textContent = "Play";
+        setStatus("Done. All tracks finished.");
+        renderList();
+        return;
+      }
+
+      pauseLeft = PAUSE_MS / 1000;
+      setStatus("Pause " + pauseLeft + "s… next: track " + (index + 2));
+      updateNav();
+
+      pauseTick = setInterval(() => {
+        pauseLeft -= 1;
+        if (pauseLeft > 0) {
+          setStatus("Pause " + pauseLeft + "s… next: track " + (index + 2));
+        }
+      }, 1000);
+
+      pauseTimer = setTimeout(() => {
+        clearPause();
+        goTo(index + 1, true);
+      }, PAUSE_MS);
+    }
+
+    function goTo(i, autoplay) {
+      clearPause();
+      if (i < 0 || i >= urls.length) return;
+      loadTrack(i);
+      if (autoplay) {
+        playing = true;
+        playBtn.textContent = "Pause";
+        player.play().catch((e) => {
+          playing = false;
+          playBtn.textContent = "Play";
+          setStatus("Playback blocked: tap Play. " + e.message, true);
+        });
+      } else {
+        playing = false;
+        playBtn.textContent = "Play";
+        player.pause();
+        setStatus("Track " + (i + 1) + " / " + urls.length + ". Tap Play.\n" + fileName(urls[i]));
+      }
+    }
+
+    playBtn.addEventListener("click", () => {
+      if (!urls.length) return;
+      if (playing) {
+        if (pauseTimer) {
+          clearPause();
+          playing = false;
+          playBtn.textContent = "Play";
+          setStatus("Paused during gap. Tap Play to continue to next track.");
+        } else {
+          player.pause();
+          playing = false;
+          playBtn.textContent = "Play";
+          setStatus("Paused.\n" + fileName(urls[index]));
+        }
+      } else {
+        if (player.ended && index < urls.length - 1) {
+          goTo(index + 1, true);
+          return;
+        }
+        clearPause();
+        playing = true;
+        playBtn.textContent = "Pause";
+        if (!player.getAttribute("src")) loadTrack(index);
+        player.play().catch((e) => {
+          playing = false;
+          playBtn.textContent = "Play";
+          setStatus("Could not play: " + e.message, true);
+        });
+      }
+    });
+
+    prevBtn.addEventListener("click", () => {
+      if (index <= 0) return;
+      goTo(index - 1, playing || !!pauseTimer);
+    });
+
+    nextBtn.addEventListener("click", () => {
+      if (index >= urls.length - 1) return;
+      goTo(index + 1, playing || !!pauseTimer);
+    });
+
+    player.addEventListener("ended", () => {
+      if (!playing) return;
+      startPauseThenNext();
+    });
+
+    player.addEventListener("play", () => {
+      playing = true;
+      playBtn.textContent = "Pause";
+      setStatus("Playing " + (index + 1) + " / " + urls.length + "\n" + fileName(urls[index]));
+      renderList();
+    });
+
+    player.addEventListener("error", () => {
+      const err = player.error;
+      const msg = err ? ("code " + err.code) : "unknown";
+      setStatus("Error loading track " + (index + 1) + " (" + msg + "). Skipping in 3s…", true);
+      if (!playing) return;
+      setTimeout(() => {
+        if (index >= urls.length - 1) {
+          playing = false;
+          playBtn.textContent = "Play";
+          setStatus("Done (last track failed).");
+          updateNav();
+        } else {
+          goTo(index + 1, true);
+        }
+      }, 3000);
+    });
+
+    if (!urls.length) {
+      setStatus("No tracks. Edit playlist.txt then run: python3 build.py", true);
+    } else {
+      loadTrack(0);
+      setStatus("Ready: " + urls.length + " track(s). Tap Play.");
+    }
+  </script>
+</body>
+</html>
